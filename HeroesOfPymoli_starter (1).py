@@ -1,12 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# ### Note
-# * Instructions have been included for each segment. You do not have to follow them exactly, but they are included to help you think through the steps.
-
-# In[41]:
-
-
 # We need to use numpy for this activity because of its focus on tabular data. 
 import pandas as pd
 import numpy as np
@@ -17,22 +8,9 @@ purchaseData = pd.read_csv(file)
 purchaseData_df = pd.DataFrame(purchaseData)
 purchaseData_df.head()
 
-
-# In[42]:
-
-
 # We use this to count the total amount of purchase data.
 playerAmount = purchaseData_df["SN"].count()
 playerAmount
-
-
-# ## Player Count
-
-# * Display the total number of players
-# 
-
-# In[53]:
-
 
 # Set vatiables to find unqiue players data. We use the drop function to remove duplicates.
 playerDemographs = purchaseData.loc[:, ["Gender", "SN", "Age"]]
@@ -40,23 +18,7 @@ playerDemographs = playerDemographs.drop_duplicates()
 playerNumbers = playerDemographs.count()[0]
 pd.DataFrame({"Total Players": [playerNumbers]})
 
-
-# ## Purchasing Analysis (Total)
-
-# * Run basic calculations to obtain number of unique items, average price, etc.
-# 
-# 
-# * Create a summary data frame to hold the results
-# 
-# 
-# * Optional: give the displayed data cleaner formatting
-# 
-# 
-# * Display the summary data frame
-# 
-
-# In[61]:
-
+# Find the length of purcahse data.
 
 uniqueItem = len(purchaseData_df["Item ID"].unique())
 uniqueItem
@@ -83,32 +45,14 @@ transactionResults_df
 transResultsFormer_df = transactionResults_df[["Number of Unique Items","Average Price","Number of Purchases", "Total Revenue" ]]
 transResultsFormer_df
 
-
-# ## Gender Demographics
-
-# * Percentage and Count of Male Players
-# 
-# 
-# * Percentage and Count of Female Players
-# 
-# 
-# * Percentage and Count of Other / Non-Disclosed
-# 
-# 
-# 
-
-# In[68]:
-
-
-
-# The value counts method counts unique values in a column, then dataframe created to hold results
+# The value counts method counts unique values in a column, then dataframe created to hold results. We need to find the gender demographics.
 genderInfo_df = pd.DataFrame(purchaseData_df["Gender"].value_counts())
 genderInfo_df
 
 playerPercent = (purchaseData_df["Gender"].value_counts()/playerAmount)*100
 playerPercent
 
-# Calculations performed and added into Data Frame as a new column
+# Now we need to insert results into the dataframe.
 genderInfo_df["Percentage of Players"] = playerPercent
 genderInfo_df["Percentage of Players"] = genderInfo_df["Percentage of Players"].map("{:,.2f}%".format)
 genderInfo_df
@@ -121,27 +65,7 @@ genderInfo2_df
 fin_genderInfo_df = genderInfo2_df.rename(columns={"Gender":"Total Count"})
 fin_genderInfo_df
 
-
-# 
-# ## Purchasing Analysis (Gender)
-
-# * Run basic calculations to obtain purchase count, avg. purchase price, avg. purchase total per person etc. by gender
-# 
-# 
-# 
-# 
-# * Create a summary data frame to hold the results
-# 
-# 
-# * Optional: give the displayed data cleaner formatting
-# 
-# 
-# * Display the summary data frame
-
-# In[76]:
-
-
-# seperate gender groups
+# seperate gender groups. Need to show the gender results.
 groupedGenderData_df = purchaseData_df.groupby(["Gender"])
 groupedGenderData_df["Purchase ID"].count().head(10)
 
@@ -166,30 +90,6 @@ genderPurchaseInfo2_df
 sumGenderData_df = genderPurchaseInfo2_df.rename(columns={"Purchase ID":"Purchase Count"})
 sumGenderData_df
 
-
-# ## Age Demographics
-
-# * Establish bins for ages
-# 
-# 
-# * Categorize the existing players using the age bins. Hint: use pd.cut()
-# 
-# 
-# * Calculate the numbers and percentages by age group
-# 
-# 
-# * Create a summary data frame to hold the results
-# 
-# 
-# * Optional: round the percentage column to two decimal points
-# 
-# 
-# * Display Age Demographics Table
-# 
-
-# In[82]:
-
-
 # In this segment, we need to create bins to mactch the vlaue data of transactions. Age bins in this case.
 age_bins = [0, 9.90, 14.90, 19.90, 24.90, 29.90, 34.90, 39.90, 99999]
 group_names = ["<10", "10-14", "15-19", "20-24", "25-29", "30-34", "35-39", "40+"]
@@ -210,26 +110,6 @@ sumAge1df = summaryAgedf[["Purchase ID","SN"]]
 sumAge1df
 groupSumAgedf = sumAge1df.rename(columns={"Purchase ID":"Percentage of Players", "SN":"Total Count"})
 groupSumAgedf
-
-
-# ## Purchasing Analysis (Age)
-
-# * Bin the purchaseData data frame by age
-# 
-# 
-# * Run basic calculations to obtain purchase count, avg. purchase price, avg. purchase total per person etc. in the table below
-# 
-# 
-# * Create a summary data frame to hold the results
-# 
-# 
-# * Optional: give the displayed data cleaner formatting
-# 
-# 
-# * Display the summary data frame
-
-# In[86]:
-
 
 # Here we want to get the average age and purchase content. Using mean and count functions to execute some of the results.
 dataByAgedf = pd.DataFrame(grp_by_age_purchaseData_df["Purchase ID"].count())
@@ -254,28 +134,6 @@ dataByAgedf["Normalized Totals"] = dlr_normalized_totals_age
 dataByAgedf
 sumAgePurchaseDataVar = dataByAgedf.rename(columns={"Purchase ID":"Purchase Count"})
 sumAgePurchaseDataVar
-
-
-# ## Top Spenders
-
-# * Run basic calculations to obtain the results in the table below
-# 
-# 
-# * Create a summary data frame to hold the results
-# 
-# 
-# * Sort the total purchase value column in descending order
-# 
-# 
-# * Optional: give the displayed data cleaner formatting
-# 
-# 
-# * Display a preview of the summary data frame
-# 
-# 
-
-# In[87]:
-
 
 firstPurchaseInfo_df = pd.DataFrame(purchaseData)
 firstPurchaseInfo_df.head()
@@ -304,32 +162,7 @@ priceTotalValue2 = priceTotalValue.map("${:,.2f}".format)
 top5ID_df["Total Purchase Value"] = priceTotalValue2
 top5ID_df.head()
 
-
-# ## Most Popular Items
-
-# * Retrieve the Item ID, Item Name, and Item Price columns
-# 
-# 
-# * Group by Item ID and Item Name. Perform calculations to obtain purchase count, average item price, and total purchase value
-# 
-# 
-# * Create a summary data frame to hold the results
-# 
-# 
-# * Sort the purchase count column in descending order
-# 
-# 
-# * Optional: give the displayed data cleaner formatting
-# 
-# 
-# * Display a preview of the summary data frame
-# 
-# 
-
-# In[97]:
-
-
-# Here we need to group the data by item ID and item Name. We will also find the sum of the price for the analysis.
+# Here we need to group the data by item ID and item Name. Most popular items. We will also find the sum of the price for the analysis.
 
 groupTopItems = orig_purchaseData_df.groupby(["Item ID", "Item Name"])
 groupTopItems.count()
@@ -342,11 +175,13 @@ totalvalueofItems
 totalvalueofItems2 = totalvalueofItems.map("${:,.2f}".format)
 totalvalueofItems2
 
+# Find the mean of the most popular items.
 purchaseVariableofItems = groupTopItems["Price"].mean()
 purchaseVariableofItems
 ItemsPurchased32 = purchaseVariableofItems.map("${:,.2f}".format)
 ItemsPurchased32
 
+# Then find the item price and total amount of value from purchases.
 databyItems["Item Price"] = ItemsPurchased32
 databyItems["Total Purchase Value"] = totalvalueofItems2
 databyItems
@@ -355,22 +190,6 @@ databyItems
 sumofItemsPurchased = databyItems.rename(columns={"Purchase ID":"Purchase Count"})
 top5Items=sumofItemsPurchased.sort_values("Purchase Count", ascending=False)
 top5Items.head()
-
-
-# ## Most Profitable Items
-
-# * Sort the above table by total purchase value in descending order
-# 
-# 
-# * Optional: give the displayed data cleaner formatting
-# 
-# 
-# * Display a preview of the data frame
-# 
-# 
-
-# In[106]:
-
 
 # Here we need to total the top most profitable items by using the group variables and sum of each item.
 # We use the {:} to set it to all of the data to read. At the end we find the best valued item adding all of the variables.
@@ -382,22 +201,5 @@ bestValueItem = itemTotalValue3.loc[:,["Purchase Count", "Item Price", "Total Pu
 
 # In the end, jsut display the dataframe with a header.
 bestValueItem.head(5)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
 
 
